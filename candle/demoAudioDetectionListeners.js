@@ -35,33 +35,33 @@ function showConfiguration() {
 // signal handler
 //
 const dbDiv = document.querySelector('.db');
-document.addEventListener('signal', event => {
+// document.addEventListener('signal', event => {
 
-  const volume = event.detail.volume.toFixed(9)
-  const timestamp = event.detail.timestamp
-  const items = event.detail.items.toString().padEnd(3)
-  const dBV = dB(event.detail.volume)
+//   const volume = event.detail.volume.toFixed(9)
+//   const timestamp = event.detail.timestamp
+//   const items = event.detail.items.toString().padEnd(3)
+//   const dBV = dB(event.detail.volume)
 
-  const line = hystogramLine(volume)
-  console.log('dbV',dBV)
-  dbDiv.innerHTML = dBV;
-  if (dBV >= -8){
-    console.log('Happy Birth Day')
-    showCake()
-  }
-  if (debuglog)
-    console.log(`signal  ${timestamp} ${items} ${volume} ${dBV} ${line}`)
+//   const line = hystogramLine(volume)
+//   console.log('dbV',dBV)
+//   dbDiv.innerHTML = dBV;
+//   if (dBV >= -8){
+//     console.log('Happy Birth Day')
+//     showCake()
+//   }
+//   if (debuglog)
+//     console.log(`signal  ${timestamp} ${items} ${volume} ${dBV} ${line}`)
 
-  // document.querySelector('#audiostatuscell').style.background = 'green'
-  // document.querySelector('#audiostatuscell').style.color = 'black'
-  // document.querySelector('#audiostatus').style.background = 'green'
-  // document.querySelector('#audiostatus').textContent = 'signal'
+//   // document.querySelector('#audiostatuscell').style.background = 'green'
+//   // document.querySelector('#audiostatuscell').style.color = 'black'
+//   // document.querySelector('#audiostatus').style.background = 'green'
+//   // document.querySelector('#audiostatus').textContent = 'signal'
 
-  //const theDiv = document.getElementById('log')
-  //const content = document.createTextNode(text)
-  //theDiv.appendChild(content)
+//   //const theDiv = document.getElementById('log')
+//   //const content = document.createTextNode(text)
+//   //theDiv.appendChild(content)
 
-})
+// })
 
 //
 // silence handler

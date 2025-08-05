@@ -2,27 +2,31 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
-  <title>Happy Birthday!!! :)</title>
-  <!-- Google Font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
-  <!-- My Style -->
-  <link rel="stylesheet" href="./style/main.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
+    <title>Happy Birthday!!! :)</title>
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <!-- My Style -->
+    <link rel="stylesheet" href="./style/main.css" />
 </head>
 
 <body>
 
-    <audio class="song" loop>
-        <source src="./music/hbd.mpeg">
-        </source>
-        Your browser isn't invited for super fun audio time.
+    <audio class="song" loop src="./music/hbd.mpeg">
     </audio>
-
+    <div class="confirm-popup show" id="allow-micro">
+        <p class="popup-title">Món quà nhỏ tặng cậu!</p>
+        <button class="btn-confirm">Wow</button>
+    </div>
+    <div class="confirm-popup hide" id="start-popup">
+        <p class="popup-title">Cậu đã sẵn sàng chưa?</p>
+        <button class="btn-confirm">Rồi</button>
+    </div>
     <div class="container">
         <div class="one">
             <h1 class="one">
@@ -32,20 +36,22 @@
             <p class="two" id="greetingText">I really like your name btw!</p>
         </div>
 
-        <div class="three">
+        <div class="three" style="display: none;">
             <p>It's your birthday!! :D</p>
         </div>
 
-        <div class="four">
+        <div class="four"  style="display: none;">
             <div class="text-box">
                 <p class="hbd-chatbox">
-                Happy birthday to youu!! Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur quisquam amet ipsam vitae, voluptatum architecto aliquid id quo error tempora quos aperiam magni necessitatibus quas ut, possimus nesciunt nam ad.
+                    Happy birthday to youu!! Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur
+                    quisquam amet ipsam vitae, voluptatum architecto aliquid id quo error tempora quos aperiam magni
+                    necessitatibus quas ut, possimus nesciunt nam ad.
                 </p>
                 <p class="fake-btn">Send</p>
             </div>
         </div>
 
-        <div class="five">
+        <div class="five" style="display: none;">
             <p class="idea-1">That's what I was going to do.</p>
             <p class="idea-2">But then I stopped.</p>
             <p class="idea-3">
@@ -63,9 +69,31 @@
                 <span>O</span>
             </p>
         </div>
+        <div class="cake-container">
+            <div id="cake-holder">
+                <div class="db"></div>
+                <div class="cake">
+                    <div class="plate"></div>
+                    <div class="layer layer-bottom"></div>
+                    <div class="layer layer-middle"></div>
+                    <div class="layer layer-top"></div>
+                    <div class="icing"></div>
+                    <div class="drip drip1"></div>
+                    <div class="drip drip2"></div>
+                    <div class="drip drip3"></div>
+                    <div class="candle">
+                        <div class="flame"></div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <h5 class="cake-off">❣ Happy Birthday Dude ❣ </h5>
+                    <p class="cake-off">❤ Wish you best ❤ </p>
+                </div>
 
+            </div>
+        </div>
         <div class="six">
-            <img src="./img/irene.jpg" alt="profile" class="profile-picture" id="imagePath"/>
+            <img src="./img/irene.jpg" alt="profile" class="profile-picture" id="imagePath" />
             <img src="img/hat.svg" alt="hat" class="hat" />
             <div class="wish">
                 <h3 class="wish-hbd">Happy Birthday!</h3>
@@ -146,14 +174,23 @@
             <p id="replay">Or click, if you want to watch it again.</p>
             <p class="last-smile">:)</p>
         </div>
-        
+
     </div>
 
 </body>
-    <!-- Greensock -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
-    <!-- Sweetalert -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="application/javascript" src="./script/main.js"></script>
+<!-- Greensock -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+<!-- Sweetalert -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+ <script src="./candle/cake.js"></script>
+<script src="./candle/volume-meter.js"></script>
+<script src="./candle/audioDetectionConfig.js"></script>
+<script src="./candle/audioDetection.js"></script>
+<script src="./candle/audioStream.js"></script>
+
+<script src="./candle/demoAudioRecorder.js"></script>
+<script src="./candle/demoAudioDetectionListeners.js"></script>
+<script src="./candle/demo.js"></script>
+<script type="application/javascript" src="./script/main.js"></script>
 
 </html>

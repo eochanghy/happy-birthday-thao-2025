@@ -1,37 +1,42 @@
 // trigger to play music in the background with sweetalert
+const song = document.querySelector('.song');
 window.addEventListener('load', () => {
-    Swal.fire({
-        title: 'Trước khi bắt đầu, có popup hiện lên thì cậu đồng ý nha!!!',
-        icon: 'warning',
-        showCancelButton: false,
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Yes',
-    }).then((result) => {
+    const allowMicroPopup = document.querySelector('#allow-micro');
+    const btnAllowMicro = allowMicroPopup.querySelector('.btn-confirm');
+    const startPopup = document.querySelector('#start-popup');
+    const btnStart = startPopup.querySelector('.btn-confirm');
 
-        if (result.isConfirmed) {
-            navigator.mediaDevices.getUserMedia(
-                {
-                    'audio': {
-                        'mandatory': {
-                            'googEchoCancellation': 'false',
-                            'googAutoGainControl': 'false',
-                            'googNoiseSuppression': 'false',
-                            'googHighpassFilter': 'false'
-                        },
-                        'optional': []
+    btnAllowMicro.addEventListener('click', () => {
+        navigator.mediaDevices.getUserMedia(
+            {
+                'audio': {
+                    'mandatory': {
+                        'googEchoCancellation': 'false',
+                        'googAutoGainControl': 'false',
+                        'googNoiseSuppression': 'false',
+                        'googHighpassFilter': 'false'
                     },
-                }).then((stream) => {
-                    // audioStream(stream);
-                    document.querySelector('.song').play();
-                    animationTimeline();
+                    'optional': []
+                },
+            }).then((stream) => {
+                audioStream(stream);
+                allowMicroPopup.classList.remove('show');
+                allowMicroPopup.classList.add('hide');
 
-                })
-                .catch(() => { });
-            // document.querySelector('.song').play();
-            // animationTimeline();
+                startPopup.classList.remove('hide');
+                startPopup.classList.add('show');
 
-        }
-    });
+            })
+            .catch(() => { });
+    })
+    btnStart.addEventListener('click', () => {
+        startPopup.classList.remove('show');
+        startPopup.classList.add('hide');
+        setTimeout(() => {
+            song.play();
+            animationTimeline();
+        }, 2000)
+    })
 });
 
 
@@ -65,7 +70,6 @@ const animationTimeline = () => {
 
     // timeline
     const tl = new TimelineMax();
-
     tl.to(".container", 0.6, {
         visibility: "visible"
     })
@@ -92,107 +96,156 @@ const animationTimeline = () => {
                 y: 10
             },
             "-=1")
-        .from(".three", 0.7, {
+        // .from(".three", 0.7, {
+        //     opacity: 0,
+        //     y: 10
+        // })
+        // .to(".three",
+        //     0.7,
+        //     {
+        //         opacity: 0,
+        //         y: 10
+        //     },
+        //     "+=3")
+        // .from(".four", 0.7, {
+        //     scale: 0.2,
+        //     opacity: 0,
+        // })
+        // .from(".fake-btn", 0.3, {
+        //     scale: 0.2,
+        //     opacity: 0,
+        // })
+        // .staggerTo(
+        //     ".hbd-chatbox span",
+        //     1.5, {
+        //     visibility: "visible",
+        // },
+        //     0.05
+        // )
+        // .to(".fake-btn", 0.1, {
+        //     backgroundColor: "rgb(127, 206, 248)",
+        // },
+        //     "+=4")
+        // .to(
+        //     ".four",
+        //     0.5, {
+        //     scale: 0.2,
+        //     opacity: 0,
+        //     y: -150
+        // },
+        //     "+=1")
+        // .from(".idea-1", 0.7, ideaTextTrans)
+        // .to(".idea-1", 0.7, ideaTextTransLeave, "+=2.5")
+        // .from(".idea-2", 0.7, ideaTextTrans)
+        // .to(".idea-2", 0.7, ideaTextTransLeave, "+=2.5")
+        // .from(".idea-3", 0.7, ideaTextTrans)
+        // .to(".idea-3 strong", 0.5, {
+        //     scale: 1.2,
+        //     x: 10,
+        //     backgroundColor: "rgb(21, 161, 237)",
+        //     color: "#fff",
+        // })
+        // .to(".idea-3", 0.7, ideaTextTransLeave, "+=2.5")
+        // .from(".idea-4", 0.7, ideaTextTrans)
+        // .to(".idea-4", 0.7, ideaTextTransLeave, "+=2.5")
+        // .from(
+        //     ".idea-5",
+        //     0.7, {
+        //     rotationX: 15,
+        //     rotationZ: -10,
+        //     skewY: "-5deg",
+        //     y: 50,
+        //     z: 10,
+        //     opacity: 0,
+        // },
+        //     "+=1.5"
+        // )
+        // .to(
+        //     ".idea-5 span",
+        //     0.7, {
+        //     rotation: 90,
+        //     x: 8,
+        // },
+        //     "+=1.4"
+        // )
+        // .to(
+        //     ".idea-5",
+        //     0.7, {
+        //     scale: 0.2,
+        //     opacity: 0,
+        // },
+        //     "+=2"
+        // )
+        // .staggerFrom(
+        //     ".idea-6 span",
+        //     0.8, {
+        //     scale: 3,
+        //     opacity: 0,
+        //     rotation: 15,
+        //     ease: Expo.easeOut,
+        // },
+        //     0.2
+        // )
+        // .staggerTo(
+        //     ".idea-6 span",
+        //     0.8, {
+        //     scale: 3,
+        //     opacity: 0,
+        //     rotation: -15,
+        //     ease: Expo.easeOut,
+        // },
+        //     0.2,
+        //     "+=1.5"
+        // )
+        .call(function () {
+            song.pause();
+        }, null, null)
+        .from(".cake-container", 1, {
             opacity: 0,
             y: 10
-        })
-        .to(".three",
-            0.7,
-            {
-                opacity: 0,
-                y: 10
-            },
-            "+=3")
-        .from(".four", 0.7, {
-            scale: 0.2,
+        },
+            "+=0.8")
+        .call(function () {
+            tl.pause();
+            document.addEventListener('signal', event => {
+
+                const volume = event.detail.volume.toFixed(9)
+                const timestamp = event.detail.timestamp
+                const items = event.detail.items.toString().padEnd(3)
+                const dBV = dB(event.detail.volume)
+
+                const line = hystogramLine(volume)
+                console.log('dbV', dBV)
+                dbDiv.innerHTML = dBV;
+                if (dBV >= -8) {
+                    console.log('Happy Birth Day')
+                    showCake();
+                    tl.play();
+                    song.play();
+                }
+                if (debuglog)
+                    console.log(`signal  ${timestamp} ${items} ${volume} ${dBV} ${line}`)
+
+                // document.querySelector('#audiostatuscell').style.background = 'green'
+                // document.querySelector('#audiostatuscell').style.color = 'black'
+                // document.querySelector('#audiostatus').style.background = 'green'
+                // document.querySelector('#audiostatus').textContent = 'signal'
+
+                //const theDiv = document.getElementById('log')
+                //const content = document.createTextNode(text)
+                //theDiv.appendChild(content)
+
+            })
+        }, null, null);
+
+
+        tl.to(".cake-container",
+        0.5,
+        {
             opacity: 0,
-        })
-        .from(".fake-btn", 0.3, {
-            scale: 0.2,
-            opacity: 0,
-        })
-        .staggerTo(
-            ".hbd-chatbox span",
-            1.5, {
-            visibility: "visible",
+            y: 10
         },
-            0.05
-        )
-        .to(".fake-btn", 0.1, {
-            backgroundColor: "rgb(127, 206, 248)",
-        },
-            "+=4")
-        .to(
-            ".four",
-            0.5, {
-            scale: 0.2,
-            opacity: 0,
-            y: -150
-        },
-            "+=1")
-        .from(".idea-1", 0.7, ideaTextTrans)
-        .to(".idea-1", 0.7, ideaTextTransLeave, "+=2.5")
-        .from(".idea-2", 0.7, ideaTextTrans)
-        .to(".idea-2", 0.7, ideaTextTransLeave, "+=2.5")
-        .from(".idea-3", 0.7, ideaTextTrans)
-        .to(".idea-3 strong", 0.5, {
-            scale: 1.2,
-            x: 10,
-            backgroundColor: "rgb(21, 161, 237)",
-            color: "#fff",
-        })
-        .to(".idea-3", 0.7, ideaTextTransLeave, "+=2.5")
-        .from(".idea-4", 0.7, ideaTextTrans)
-        .to(".idea-4", 0.7, ideaTextTransLeave, "+=2.5")
-        .from(
-            ".idea-5",
-            0.7, {
-            rotationX: 15,
-            rotationZ: -10,
-            skewY: "-5deg",
-            y: 50,
-            z: 10,
-            opacity: 0,
-        },
-            "+=1.5"
-        )
-        .to(
-            ".idea-5 span",
-            0.7, {
-            rotation: 90,
-            x: 8,
-        },
-            "+=1.4"
-        )
-        .to(
-            ".idea-5",
-            0.7, {
-            scale: 0.2,
-            opacity: 0,
-        },
-            "+=2"
-        )
-        .staggerFrom(
-            ".idea-6 span",
-            0.8, {
-            scale: 3,
-            opacity: 0,
-            rotation: 15,
-            ease: Expo.easeOut,
-        },
-            0.2
-        )
-        .staggerTo(
-            ".idea-6 span",
-            0.8, {
-            scale: 3,
-            opacity: 0,
-            rotation: -15,
-            ease: Expo.easeOut,
-        },
-            0.2,
-            "+=1.5"
-        )
+        "+=1")
         .staggerFromTo(
             ".baloons img",
             2.5, {
@@ -282,8 +335,8 @@ const animationTimeline = () => {
         );
 
     // Restart Animation on click
-    const replyBtn = document.getElementById("replay");
-    replyBtn.addEventListener("click", () => {
-        tl.restart();
-    });
+    // const replyBtn = document.getElementById("replay");
+    // replyBtn.addEventListener("click", () => {
+    //     tl.restart();
+    // });
 }
