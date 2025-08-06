@@ -1,5 +1,10 @@
 // trigger to play music in the background with sweetalert
 const song = document.querySelector('.song');
+let micStream = null;
+let analyser, dataArray;
+let flame = document.querySelector('.flame');
+let = null;
+let isMusicUnlocked = false;
 window.addEventListener('load', () => {
     const allowMicroPopup = document.querySelector('#allow-micro');
     const btnAllowMicro = allowMicroPopup.querySelector('.btn-confirm');
@@ -7,9 +12,9 @@ window.addEventListener('load', () => {
     const btnStart = startPopup.querySelector('.btn-confirm');
 
     btnAllowMicro.addEventListener('click', () => {
-        navigator.mediaDevices.getUserMedia(
-            {
-                'audio': {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({
+                audio: {
                     'mandatory': {
                         'googEchoCancellation': 'false',
                         'googAutoGainControl': 'false',
@@ -17,28 +22,39 @@ window.addEventListener('load', () => {
                         'googHighpassFilter': 'false'
                     },
                     'optional': []
-                },
-            }).then((stream) => {
-                audioStream(stream);
-                allowMicroPopup.classList.remove('show');
-                allowMicroPopup.classList.add('hide');
-
-                startPopup.classList.remove('hide');
-                startPopup.classList.add('show');
-
+                }
             })
-            .catch(() => { });
-    })
+                .then(function (stream) {
+                    micStream = stream;
+                    const audioContext = new AudioContext();
+                    const source = audioContext.createMediaStreamSource(stream);
+                    analyser = audioContext.createAnalyser();
+                    source.connect(analyser);
+
+                    analyser.fftSize = 256;
+                    dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+                    allowMicroPopup.classList.remove('show');
+                    allowMicroPopup.classList.add('hide');
+
+                    startPopup.classList.remove('hide');
+                    startPopup.classList.add('show');
+                })
+                .catch(err => {
+                    console.warn("Không thể truy cập micro:", err);
+                });
+        }
+    });
     btnStart.addEventListener('click', () => {
         startPopup.classList.remove('show');
         startPopup.classList.add('hide');
         setTimeout(() => {
-            song.play();
+            // song.play();
+            fadeInAudio(song, 1000);
             animationTimeline();
         }, 2000)
     })
 });
-
 
 // animation timeline
 const animationTimeline = () => {
@@ -198,52 +214,25 @@ const animationTimeline = () => {
         //     "+=1.5"
         // )
         .call(function () {
-            fadeOutAudio(song, 1000);
+            // song.pause();
+            fadeOutAudio(song, 1500);
         }, null, null)
         .from(".cake-container", 1, {
             opacity: 0,
-            y: 10
+            y: 10,
         },
             "+=0.8")
         .call(function () {
             tl.pause();
-            document.addEventListener('signal', event => {
-                const volume = event.detail.volume.toFixed(9)
-                const timestamp = event.detail.timestamp
-                const items = event.detail.items.toString().padEnd(3)
-                const dBV = dB(event.detail.volume)
-
-                const line = hystogramLine(volume)
-                console.log('dbV', dBV)
-                if (dBV >= -8) {
-                    console.log('Happy Birth Day')
-                    showCake();
-                    tl.play();
-                    fadeInAudio(song, 1000);
-                }
-                if (debuglog)
-                    console.log(`signal  ${timestamp} ${items} ${volume} ${dBV} ${line}`)
-
-                // document.querySelector('#audiostatuscell').style.background = 'green'
-                // document.querySelector('#audiostatuscell').style.color = 'black'
-                // document.querySelector('#audiostatus').style.background = 'green'
-                // document.querySelector('#audiostatus').textContent = 'signal'
-
-                //const theDiv = document.getElementById('log')
-                //const content = document.createTextNode(text)
-                //theDiv.appendChild(content)
-
-            })
-        }, null, null);
-
-
-    tl.to(".cake-container",
-        0.5,
-        {
-            opacity: 0,
-            y: 10
-        },
-        "+=1")
+            startListening(tl);
+        }, null, null)
+        .to(".cake-container",
+            0.5,
+            {
+                opacity: 0,
+                y: 10
+            },
+            "+=1")
         .staggerFromTo(
             ".baloons img",
             2.5, {
@@ -339,9 +328,73 @@ const animationTimeline = () => {
     // });
 }
 
+function startListening(timeline) {
+    if (!analyser) return;
+
+    let lastDirection = '';
+
+    function detectBlow() {
+        analyser.getByteFrequencyData(dataArray);
+        let volume = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+
+        // 🌬 Nếu âm lượng dưới ngưỡng, chỉ làm gió nhẹ (nghiêng lửa)
+        const divDB = document.querySelector('.db');
+        if (Number(divDB.textContent) < volume) {
+            divDB.innerHTML = volume;
+        }
+        console.log({ volume })
+        if (volume > 50 && volume < 91) {
+            if (flame && !isBlownOut()) {
+                const direction = Math.random() > 0.5 ? 'left' : 'right';
+                if (direction !== lastDirection) {
+                    flame.classList.remove('wind-left', 'wind-right');
+                    flame.classList.add(`wind-${direction}`);
+                    lastDirection = direction;
+                }
+            }
+        } else {
+            flame.classList.remove('wind-left', 'wind-right');
+        }
+
+        // 💥 Nếu vượt ngưỡng → tắt nến
+        if (volume >= 81) {
+            triggerBlowEffect();
+            setTimeout(() => {
+                // song.play();
+                fadeInAudio(song, 1500);
+                timeline.play();
+            }, 2000)
+            micStream.getTracks().forEach(track => track.stop());
+            return;
+        }
+
+        requestAnimationFrame(detectBlow);
+    }
+
+    detectBlow();
+}
+
+function isBlownOut() {
+    return document.getElementById('cake-holder').classList.contains('done');
+}
+
+function triggerBlowEffect() {
+    const cakeHolder = document.getElementById('cake-holder');
+    cakeHolder.classList.add('done');
+    createSmoke();
+}
+
+function createSmoke() {
+    if (!flame) return;
+
+    const smoke = document.createElement('div');
+    smoke.classList.add('smoke');
+    flame.parentElement.appendChild(smoke);
+}
+
 
 function fadeInAudio(audio, duration = 1000) {
-    audio.volume = 0;
+    audio.volume = 0.1;
     audio.play();
 
     const step = 0.01;
@@ -357,16 +410,29 @@ function fadeInAudio(audio, duration = 1000) {
 }
 
 function fadeOutAudio(audio, duration = 1000) {
-  const step = 0.01;
-  const intervalTime = duration * step;
+    const startVolume = audio.volume || 1; // đảm bảo có giá trị
+    const step = 0.01;
+    const intervalTime = duration * step;
 
-  const fadeInterval = setInterval(() => {
-    if (audio.volume > 0.01) {
-      audio.volume = Math.max(audio.volume - step, 0);
-    } else {
-      clearInterval(fadeInterval);
-      audio.pause();
-      audio.volume = 1; // reset volume
-    }
-  }, intervalTime);
+    let currentVolume = startVolume;
+
+    const fadeInterval = setInterval(() => {
+        currentVolume = Math.max(currentVolume - step, 0.05); // KHÔNG để về 0
+
+        audio.volume = currentVolume;
+
+        // Khi gần nhỏ hết thì dừng lại, pause và reset
+        if (currentVolume <= 0.06) {
+            clearInterval(fadeInterval);
+
+            try {
+                audio.pause();
+            } catch (e) {
+                console.warn("Audio pause error:", e);
+            }
+
+            // audio.currentTime = 0; // reset về đầu bài
+            audio.volume = startVolume; // khôi phục âm lượng ban đầu
+        }
+    }, intervalTime);
 }
