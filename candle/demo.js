@@ -47,39 +47,39 @@ window.onload = function() {
     // https://stackoverflow.com/questions/50218162/web-autoplay-policy-change-resuming-context-doesnt-unmute-audio
 
     // One-liner to resume playback when user interacted with the page.
-    document.querySelector('#start').addEventListener('click', function() {
+    // document.querySelector('#start').addEventListener('click', function() {
 
-      audioContext.resume().then( () => {
-        console.log('User interacted with the page. Playback resumed successfully')
-      })
+    //   audioContext.resume().then( () => {
+    //     console.log('User interacted with the page. Playback resumed successfully')
+    //   })
 
-    })
+    // })
 
-    document.querySelector('#startconsoledebug').addEventListener('click', function() {
-      debuglog = true
-    })
+    // document.querySelector('#startconsoledebug').addEventListener('click', function() {
+    //   debuglog = true
+    // })
 
-    // debug log flag
-    document.querySelector('#stopconsoledebug').addEventListener( 'click', () =>  {
-      debuglog = false
-    })
+    // // debug log flag
+    // document.querySelector('#stopconsoledebug').addEventListener( 'click', () =>  {
+    //   debuglog = false
+    // })
 
     // Attempt to get audio input
     try {
         // ask for an audio input
-        navigator.mediaDevices.getUserMedia(
-        {
-            'audio': {
-                'mandatory': {
-                    'googEchoCancellation': 'false',
-                    'googAutoGainControl': 'false',
-                    'googNoiseSuppression': 'false',
-                    'googHighpassFilter': 'false'
-                },
-                'optional': []
-            },
-        }).then(audioStream)
-        .catch(didntGetStream);
+        // navigator.mediaDevices.getUserMedia(
+        // {
+        //     'audio': {
+        //         'mandatory': {
+        //             'googEchoCancellation': 'false',
+        //             'googAutoGainControl': 'false',
+        //             'googNoiseSuppression': 'false',
+        //             'googHighpassFilter': 'false'
+        //         },
+        //         'optional': []
+        //     },
+        // }).then(audioStream)
+        // .catch(didntGetStream);
     } catch (e) {
         alert('getUserMedia threw exception :' + e);
     }

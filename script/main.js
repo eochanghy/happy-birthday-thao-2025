@@ -198,7 +198,7 @@ const animationTimeline = () => {
         //     "+=1.5"
         // )
         .call(function () {
-            song.pause();
+            fadeOutAudio(song, 1000);
         }, null, null)
         .from(".cake-container", 1, {
             opacity: 0,
@@ -208,7 +208,6 @@ const animationTimeline = () => {
         .call(function () {
             tl.pause();
             document.addEventListener('signal', event => {
-
                 const volume = event.detail.volume.toFixed(9)
                 const timestamp = event.detail.timestamp
                 const items = event.detail.items.toString().padEnd(3)
@@ -216,12 +215,11 @@ const animationTimeline = () => {
 
                 const line = hystogramLine(volume)
                 console.log('dbV', dBV)
-                dbDiv.innerHTML = dBV;
                 if (dBV >= -8) {
                     console.log('Happy Birth Day')
                     showCake();
                     tl.play();
-                    song.play();
+                    fadeInAudio(song, 1000);
                 }
                 if (debuglog)
                     console.log(`signal  ${timestamp} ${items} ${volume} ${dBV} ${line}`)
@@ -239,7 +237,7 @@ const animationTimeline = () => {
         }, null, null);
 
 
-        tl.to(".cake-container",
+    tl.to(".cake-container",
         0.5,
         {
             opacity: 0,
@@ -339,4 +337,36 @@ const animationTimeline = () => {
     // replyBtn.addEventListener("click", () => {
     //     tl.restart();
     // });
+}
+
+
+function fadeInAudio(audio, duration = 1000) {
+    audio.volume = 0;
+    audio.play();
+
+    const step = 0.01;
+    const intervalTime = duration * step; // ms for each step
+
+    const fadeInterval = setInterval(() => {
+        if (audio.volume < 1.0) {
+            audio.volume = Math.min(audio.volume + step, 1.0);
+        } else {
+            clearInterval(fadeInterval);
+        }
+    }, intervalTime);
+}
+
+function fadeOutAudio(audio, duration = 1000) {
+  const step = 0.01;
+  const intervalTime = duration * step;
+
+  const fadeInterval = setInterval(() => {
+    if (audio.volume > 0.01) {
+      audio.volume = Math.max(audio.volume - step, 0);
+    } else {
+      clearInterval(fadeInterval);
+      audio.pause();
+      audio.volume = 1; // reset volume
+    }
+  }, intervalTime);
 }

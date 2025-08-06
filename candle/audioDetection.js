@@ -133,7 +133,7 @@ function signal(timestamp, duration) {
     volumeState = 'signal'
   }  
 
-}  
+}
 
 /**
  * silence
