@@ -213,26 +213,26 @@ const animationTimeline = () => {
         //     0.2,
         //     "+=1.5"
         // )
-        .call(function () {
-            // song.pause();
-            fadeOutAudio(song, 1500);
-        }, null, null)
-        .from(".cake-container", 1, {
-            opacity: 0,
-            y: 10,
-        },
-            "+=0.8")
-        .call(function () {
-            tl.pause();
-            startListening(tl);
-        }, null, null)
-        .to(".cake-container",
-            0.5,
-            {
-                opacity: 0,
-                y: 10
-            },
-            "+=1")
+        // .call(function () {
+        //     // song.pause();
+        //     fadeOutAudio(song, 1500);
+        // }, null, null)
+        // .from(".cake-container", 1, {
+        //     opacity: 0,
+        //     y: 10,
+        // },
+        //     "+=0.8")
+        // .call(function () {
+        //     tl.pause();
+        //     startListening(tl);
+        // }, null, null)
+        // .to(".cake-container",
+        //     0.5,
+        //     {
+        //         opacity: 0,
+        //         y: 10
+        //     },
+        //     "+=1")
         .staggerFromTo(
             ".baloons img",
             2.5, {
@@ -338,10 +338,10 @@ function startListening(timeline) {
         let volume = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
 
         // 🌬 Nếu âm lượng dưới ngưỡng, chỉ làm gió nhẹ (nghiêng lửa)
-        const divDB = document.querySelector('.db');
-        if (Number(divDB.textContent) < volume) {
-            divDB.innerHTML = volume;
-        }
+        // const divDB = document.querySelector('.db');
+        // if (Number(divDB.textContent) < volume) {
+        //     divDB.innerHTML = volume;
+        // }
         console.log({ volume })
         if (volume > 50 && volume < 91) {
             if (flame && !isBlownOut()) {
