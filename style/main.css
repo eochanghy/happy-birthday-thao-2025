@@ -3,7 +3,7 @@ html {
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
   margin: 0;
 }
 
@@ -27,12 +27,27 @@ body {
   background-color: #fff;
 }
 
+.confirm-popup .cute-1 {
+  width: auto;
+  height: 250px;
+  position: absolute;
+  top: -100%;
+}
+.confirm-popup .cute-2 {
+  width: auto;
+  height: 150px;
+}
+
 .confirm-popup .popup-title {
   margin-top: 0;
   line-height: 1.4;
   margin-bottom: 24px;
   font-size: 1.6rem;
   text-align: center;
+}
+
+#start-popup .popup-title {
+  margin-bottom: 0;
 }
 
 .confirm-popup .btn-confirm {
@@ -84,6 +99,10 @@ body {
   top: 20vh;
 }
 
+.container p {
+  padding: 0 32px;
+}
+
 .one {
   font-size: 4.5rem;
 }
@@ -95,6 +114,10 @@ body {
 
 .three {
   font-size: 3rem;
+}
+
+.four {
+  padding: 0 32px;
 }
 
 .four .text-box {
@@ -109,6 +132,8 @@ body {
 .text-box p {
   margin: 0;
   text-align: left;
+  padding: 0;
+  white-space: pre-line;
 }
 
 .text-box span {
@@ -168,11 +193,12 @@ body {
 }
 
 .six .hat {
-  left: 50%;
+  left: 30%;
   position: absolute;
+  transform: translateX(-50%);
   /* transform: scale(0.1); */
   top: -35%;
-  width: 100px;
+  width: 120px;
 }
 
 .baloons img {
@@ -273,6 +299,7 @@ body {
   font-size: 2rem;
   font-weight: lighter;
   margin: 10px 0 0;
+  padding: 0 32px;
 }
 
 .nine p {
@@ -330,11 +357,6 @@ body {
 
   .idea-6 span {
     font-size: 10rem;
-  }
-
-  .six .hat {
-    /* top: -20px; */
-    width: 100px;
   }
 
   .wish-hbd {
